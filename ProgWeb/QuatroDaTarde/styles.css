@@ -85,3 +85,16 @@ h2 {
     text-align: justify;
     font-size: 25px;
 }
+
+/* Recursividade */
+@media (max-width: 768px) { /* Defina o ponto de quebra para celular (por exemplo, 768px) */
+    .barrasuperior {
+        height: 10%; /* Altura de 10% para tela de celular */
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) { /* Defina o ponto de quebra para tablet (por exemplo, 769px a 1024px) */
+    .barrasuperior {
+        height: 15%; /* Altura de 15% para tela de tablet */
+    }
+}

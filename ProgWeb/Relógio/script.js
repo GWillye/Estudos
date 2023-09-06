@@ -16,15 +16,17 @@
  *
  *  Essa atualização pode ser feita usando o método 'setInterval'.
  */
+const horas = document.getElementById('horas');
+const minutos = document.getElementById('minutos');
+const segundos = document.getElementById('segundos');
 
-function time() {
-  let date = new Date();
+const relogio = setInterval(function time () {
+  let dateToday = new Date();
+  let h = dateToday.getHours();
+  let min = dateToday.getMinutes();
+  let sec = dateToday.getSeconds();
 
-}
-
-/**function hour() {
-  let date = new Date();
-  return date.getHours();
-} */
-
-/** Chamada da função de time para funcionar o relógio usando o método 'setInterval'*/
+  horas.textContent = h;
+  minutos.textContent = min;
+  segundos.textContent = sec;
+});
