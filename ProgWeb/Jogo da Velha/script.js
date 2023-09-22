@@ -1,24 +1,16 @@
-/*
- *  Script com a lógica do Jogo da Velha
- *  Ele possui o esqueleto dos método essenciais.
- *
- *  DICAS GERAIS:
- *  - Modifique este arquivo o quanto for necessário.
- */
-
-/*Declaração de uma variável que retorna uma lista de elementos presentes no documento 
-* que coincidam com o grupo de seletores especificado. 
-O objeto retornado é uma NodeList.  
-*/
+// Declaração das variáveis globais
 const cells = document.querySelectorAll(".cell");
-
-//Variável que retorna o valor selecionado do statusText
 const statusText = document.querySelector("#statusText");
-
-/*Insira aqui as condições de vitória, para isso utilize a lógica do funcionamento
- * do jogo da velha
- */
-const winConditions = [];
+const winConditions = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
 
 let options = ["", "", "", "", "", "", "", "", ""];
 let currentPlayer = "X";
@@ -27,20 +19,75 @@ let running = false;
 // Chamada da função para inicializar o jogo
 initializeGame();
 
-// Insira aqui a função para a inicialização do jogo
-function initializeGame() {}
+// Função para a inicialização do jogo
+function initializeGame() {
+  cells.forEach((cell) => {
+    cell.addEventListener("click", cellClicked);
+  });
+  document.querySelector("#restart-Btn").addEventListener("click", restartGame);
+  renderStatusText();
+}
 
-// Função para a verificação do clique para adicionar o valor e verifica o vencedor.
-function cellClicked() {}
+// Função chamada quando uma célula é clicada
+function cellClicked(e) {
+  const cell = e.target;
+  const index = cell.getAttribute("cellIndex");
 
-// Função para atualizar visualização da informação
-function updateCell(cell, index) {}
+  if (options[index] === "" && running) {
+    options[index] = currentPlayer;
+    updateCell(cell, index);
+    checkWinner();
+    changePlayer();
+  }
+}
 
-// Função para escolha e alternância de jogadores
-function changePlayer() {}
+// Função para atualizar a visualização da célula
+function updateCell(cell, index) {
+  cell.textContent = options[index];
+}
 
-//Função para verificar o vencedor
-function checkWinner() {}
+// Função para atualizar o texto de status
+function renderStatusText() {
+  if (!running) {
+    statusText.textContent = "Clique em Reiniciar para jogar novamente!";
+  } else {
+    statusText.textContent = `Jogador atual: ${currentPlayer}`;
+  }
+}
 
-// Função para resert das informações da tela
-function restartGame() {}
+// Função para alternar entre os jogadores
+function changePlayer() {
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
+  renderStatusText();
+}
+
+// Função para verificar o vencedor
+function checkWinner() {
+  for (const condition of winConditions) {
+    const [a, b, c] = condition;
+    if (options[a] && options[a] === options[b] && options[a] === options[c]) {
+      statusText.textContent = `Jogador ${options[a]} venceu!`;
+      running = false;
+      return;
+    }
+  }
+
+  if (!options.includes("")) {
+    statusText.textContent = "Empate!";
+    running = false;
+  }
+}
+
+// Função para reiniciar o jogo
+function restartGame() {
+  options = ["", "", "", "", "", "", "", "", ""];
+  currentPlayer = "X";
+  running = true;
+  cells.forEach((cell) => {
+    cell.textContent = "";
+  });
+  renderStatusText();
+}
+
+// Inicializar o jogo
+initializeGame();
